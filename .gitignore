@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# logs
+logs
+*.log
+
+# environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+
+# build
+dist/
+build/
+
+# coverage
+coverage/
+
+# cache
+.cache/
