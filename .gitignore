@@ -1,28 +1,24 @@
-# dependencies
-node_modules/
-
-# logs
+# Logs
 logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# environment
-.env
-.env.local
+node_modules
+dist
+dist-ssr
+*.local
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
+# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-
-# build
-dist/
-build/
-
-# coverage
-coverage/
-
-# cache
-.cache/
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
