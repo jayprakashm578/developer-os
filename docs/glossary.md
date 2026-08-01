@@ -33,3 +33,16 @@ A tool that combines application files for deployment.
 A security mechanism that isolates code from the operating system and other applications.
 
 Browsers run JavaScript inside a sandbox to prevent web pages from accessing sensitive files or system resources without permission.
+
+## Separation of Concerns (SoC)
+
+A software engineering principle where each file, module, or component has a single responsibility. This makes applications easier to maintain, debug, test, and extend.
+
+## Entry Point
+
+The first file that starts an application.
+
+For web applications:
+
+- index.html is the browser entry point.
+- main.js is the JavaScript entry point.
