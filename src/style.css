@@ -16,6 +16,10 @@ button{
 
 }
 
-button:hover{
+button:not(:disabled):hover{
   background-color:green
+}
+
+.date{
+  display:none;
 }
