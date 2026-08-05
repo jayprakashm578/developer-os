@@ -1,25 +1,50 @@
-body{
-  background-color:rgb(12, 13, 14);
-  color:white;
-  text-align:center;
-}
-h1{
-  font-size:48px;
-}
-
-button{
-  border-radius:9px;
-  padding:3px 10px;
-  background-color:rgb(36, 143, 220);
-  color:white;
-  cursor:pointer;
-
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(12, 13, 14);
+  color: white;
+  text-align: center;
 }
 
-button:not(:disabled):hover{
-  background-color:green
+h1 {
+  font-size: 48px;
 }
 
-.date{
-  display:none;
+button {
+  border-radius: 9px;
+  padding: 3px 10px;
+  background-color: rgb(36, 143, 220);
+  color: white;
+  cursor: pointer;
+
+}
+
+button:not(:disabled):hover {
+  background-color: green
+}
+
+.date {
+  display: none;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+li {
+  list-style: none;
+}
+
+#my-missions {
+  flex-direction: column;
+}
+
+#my-missions li {
+  display: flex;
+  width: 200px;
+
+
 }
