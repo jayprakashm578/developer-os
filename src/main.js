@@ -98,6 +98,9 @@ document.querySelector("#app").innerHTML = `
       <h2>${greetUser(user.name)}</h2>
       <p>Goal: ${user.goal}</p>
       <p>Country: ${user.country}</p>
+
+      <h2>Team Members</h2>
+      <ul id="team"></ul>
   
          <ul id='my-skills'> </ul>
          <ul id='my-technologies'> </ul>
@@ -232,23 +235,63 @@ const greet = () => {
 }
 greet();
 
+//Mission Active button
+const heading = document.querySelector("h1");
+const subtitle = document.querySelector(".subtitle");
+const subHeading = document.querySelector("h2");
+const date = document.querySelector(".date");
+const startBtn = document.querySelector("#startBtn");
+
 function startMission() {
-  document.querySelector("h1").textContent = "Mission Started Successfully";
-  document.querySelector(".subtitle").textContent = "We are on a mission to explore the universe ";
-  document.querySelector("h2").textContent = "Mission Started";
-  document.querySelector(".date").style.display = "block";
-  // document.querySelector("#startBtn").disabled = true;
-  document.querySelector("#startBtn").textContent = "Mission Active";
+  heading.textContent = "Mission Started Successfully";
+  subtitle.textContent = "We are on a mission to explore the universe ";
+
+  date.style.display = "block";
+  // startBtn.disabled = true;
+  startBtn.textContent = "Mission Active";
 
 }
 // console.log(parseInt(Date.()));
 
 
 
-button.addEventListener("click",()=>{
-  startMission();
-  completeMission();
-} );
+
+//Mission Promise
+function launchMission() {
+  return new Promise((resolve, reject) => {
+    const success = true;
+
+    setTimeout(() => {
+      if (success) {
+        resolve("Mission launched successfully");
+      }
+      else {
+        reject("Mission launch failed");
+      }
+    }, 2000);
+  });
+}
+
+launchMission().then((message) => {
+  console.log(message);
+})
+  .catch((error) => {
+    console.log(error);
+  })
+
+//Converting previous code to async/await
+async function launchMissionMessage() {
+  try {
+    const message = await launchMission();
+    console.log(message);
+  }
+  catch (error) {
+    console.log(error);
+  }
+
+}
+
+launchMissionMessage();
 
 const dateSpan = document.getElementById("date-display");
 const today = new Date();
@@ -273,3 +316,62 @@ for (let i = 1; i <= 5; i++) {
     // console.log("Mission Complete")
   }
 }
+
+//Fetch user data from jsonplaceholder
+
+async function fetchUser() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+
+    const data = await response.json();
+    console.log(data);
+   
+    let index=0;
+     document.getElementById("team").innerHTML=""
+
+    while(index<data.length){
+      // console.log(data[index].name)
+   
+      document.getElementById("team").innerHTML+=`<li>${data[index].name}</li>`
+      index++;
+    }
+  }
+  catch (error) {
+    console.log(error)
+  }
+
+}
+
+fetchUser()
+
+
+//Mission start click event listener
+button.addEventListener("click", () => {
+  heading.textContent = "Mission Starting"
+  setTimeout(() => {
+    heading.textContent = "Loading..."
+  }, 200);
+
+  setTimeout(() => {
+    heading.textContent = "1 Second"
+  }, 500);
+
+  console.log("missioin started")
+  setTimeout(() => {
+    startMission();
+    completeMission();
+  }, 1000);
+
+  //SubHeading Mission Countdown
+  let count = 4;
+
+  const missionCountdown = setInterval(() => {
+    count--;
+    subHeading.textContent = "Mission starting in " + count + "...";
+
+    if (count === 0) {
+      subHeading.textContent = "Mission Started";
+      clearInterval(missionCountdown);
+    }
+  }, 2000);
+});
