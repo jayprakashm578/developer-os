@@ -235,6 +235,58 @@ const greet = () => {
 }
 greet();
 
+//User Authentication
+function authenticateUser(username, password){
+  return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+      if(username==="jayaprakash"&& password==="1234"){
+        resolve("Authentication Successful");
+      }
+      else{
+        reject(new Error("Invalid Credentials"));
+      }
+      
+    }, 1500);
+  })
+}
+
+async function login(){
+  try{
+    const result= await authenticateUser("jayaprakash", "wrong");
+    console.log(result)
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+login();
+
+//Validate Mission
+function validateMission(mission){
+  if(!mission){
+    throw new Error("Mission is required");
+  }
+  if(mission.length<5){
+    throw new Error("Mission name is too short");
+  }
+  return "Mission is valid"
+}
+
+async function test(){
+
+  try{
+    console.log(validateMission("AI"))
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+test();
+
+console.log(validateMission("Learn Node.js"));
+
+
 //Mission Active button
 const heading = document.querySelector("h1");
 const subtitle = document.querySelector(".subtitle");
