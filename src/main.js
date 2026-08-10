@@ -100,7 +100,9 @@ document.querySelector("#app").innerHTML = `
       <p>Country: ${user.country}</p>
 
       <h2>Team Members</h2>
+      <p id="loading">Loading team members...</p>
       <ul id="team"></ul>
+      <button id="reload">Reload Team</button>
   
          <ul id='my-skills'> </ul>
          <ul id='my-technologies'> </ul>
@@ -236,23 +238,23 @@ const greet = () => {
 greet();
 
 //User Authentication
-function authenticateUser(username, password){
-  return new Promise((resolve,reject)=>{
+function authenticateUser(username, password) {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if(username==="jayaprakash"&& password==="1234"){
+      if (username === "jayaprakash" && password === "1234") {
         resolve("Authentication Successful");
       }
-      else{
+      else {
         reject(new Error("Invalid Credentials"));
       }
-      
+
     }, 1500);
   })
 }
 
-async function login(){
-  try{
-    const result= await authenticateUser("jayaprakash", "wrong");
+async function login() {
+  try {
+    const result = await authenticateUser("jayaprakash", "wrong");
     console.log(result)
 
   } catch (error) {
@@ -263,19 +265,19 @@ async function login(){
 login();
 
 //Validate Mission
-function validateMission(mission){
-  if(!mission){
+function validateMission(mission) {
+  if (!mission) {
     throw new Error("Mission is required");
   }
-  if(mission.length<5){
+  if (mission.length < 5) {
     throw new Error("Mission name is too short");
   }
   return "Mission is valid"
 }
 
-async function test(){
+async function test() {
 
-  try{
+  try {
     console.log(validateMission("AI"))
   } catch (error) {
     console.log(error.message);
@@ -371,31 +373,74 @@ for (let i = 1; i <= 5; i++) {
 
 //Fetch user data from jsonplaceholder
 
-async function fetchUser() {
+// async function fetchUser() {
+//   try {
+//     const response = await fetch("https://jsonplaceholder.typicode.com/users");
+
+//     const data = await response.json();
+//     console.log(data);
+
+//     let index=0;
+//      document.getElementById("team").innerHTML=""
+
+//     while(index<data.length){
+//       // console.log(data[index].name)
+
+//       document.getElementById("team").innerHTML+=`<li>${data[index].name}</li>`
+//       index++;
+//     }
+//   }
+//   catch (error) {
+//     console.log(error)
+//   }
+
+// }
+
+// fetchUser()
+
+//Fetch Team members
+async function fetchTeam() {
+  const loadingElement = document.getElementById("loading");
+
   try {
+    loadingElement.style.display = "block";
+
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
 
-    const data = await response.json();
-    console.log(data);
-   
-    let index=0;
-     document.getElementById("team").innerHTML=""
-
-    while(index<data.length){
-      // console.log(data[index].name)
-   
-      document.getElementById("team").innerHTML+=`<li>${data[index].name}</li>`
-      index++;
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
     }
-  }
-  catch (error) {
-    console.log(error)
-  }
 
+    const team = await response.json();
+    // console.log(team)
+
+    const teamList = team.map(member => ` <li>
+        <strong>${member.name}</strong><br>
+        Email: ${member.email}<br>
+        Company: ${member.company.name}<br>
+        City: ${member.address.city}
+    </li>`).join("");
+
+    document.getElementById("team").innerHTML = teamList;
+
+  } catch (error) {
+    console.log(error.message);
+
+    document.getElementById("team").innerHTML = `<li style="color: red;">Unable to load team members</li>`;
+
+  } finally {
+    loadingElement.style.display = "none";
+  };
 }
 
-fetchUser()
+fetchTeam();
 
+//Event listener for reload team
+document.getElementById("reload").addEventListener("click", () => {
+  setTimeout(() => {
+    fetchTeam();
+  }, 1000);
+})
 
 //Mission start click event listener
 button.addEventListener("click", () => {

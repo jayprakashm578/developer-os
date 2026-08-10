@@ -4,6 +4,8 @@ body {
   background-color: rgb(12, 13, 14);
   color: white;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
@@ -50,10 +52,11 @@ li {
 }
 
 #team{
-padding-right: 20px;
+/* padding-right: 10px; */
+justify-content: center;
 }
 
-#team li{
-    width: 200px;
-  justify-self: start;
+#loading{
+  display: none;
+  color: blue;
 }
