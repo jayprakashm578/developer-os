@@ -117,20 +117,6 @@ document.querySelector("#app").innerHTML = `
     </main>
     `
 
-//Closures
-function createMissionCounter() {
-  let count = 0;
-  return function () {
-    count++;
-    console.log("Completed", count);
-    document.querySelector("#mission-counter").textContent = "Mission Counter:" + count;
-
-  }
-}
-const completeMission = createMissionCounter();
-// completeMission();
-// completeMission();
-// completeMission();
 
 //Skills    
 const skills = ["HTML", "CSS", "JavaScript", "Node.js"];
@@ -225,7 +211,7 @@ else {
 
 // technologies.forEach((tech)=>console.log("Learning "+tech));
 
-const button = document.querySelector("#startBtn");
+// const button = document.querySelector("#startBtn");
 // console.log(button)
 
 // function greet() {
@@ -289,23 +275,6 @@ test();
 console.log(validateMission("Learn Node.js"));
 
 
-//Mission Active button
-const heading = document.querySelector("h1");
-const subtitle = document.querySelector(".subtitle");
-const subHeading = document.querySelector("h2");
-const date = document.querySelector(".date");
-const startBtn = document.querySelector("#startBtn");
-
-function startMission() {
-  heading.textContent = "Mission Started Successfully";
-  subtitle.textContent = "We are on a mission to explore the universe ";
-
-  date.style.display = "block";
-  // startBtn.disabled = true;
-  startBtn.textContent = "Mission Active";
-
-}
-// console.log(parseInt(Date.()));
 
 
 
@@ -442,8 +411,136 @@ document.getElementById("reload").addEventListener("click", () => {
   }, 1000);
 })
 
+//Create Mission 
+async function createMission() {
+  const mission = {
+    title: "Learn React",
+    difficulty: "Hard"
+  };
+
+  try {
+    missionResult.textContent = "Creating Mission...";
+
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(mission)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log("Mission Created: ", data)
+
+    missionResult.textContent = `Mission created successfully. ID: ${data.id}`;
+
+  } catch (error) {
+    missionResult.textContent = `Failed: ${error.message}`;
+    console.log("Failed: ", error.message)
+  }
+}
+
+// createMission();
+
+const createMissionBtn = document.getElementById("createMissionBtn");
+const missionResult = document.getElementById("missionResult");
+const missionTitle = document.getElementById("missionTitle");
+
+
+createMissionBtn.addEventListener("click", createMission);
+
+//Deploying Mission
+async function deployMission() {
+    const title = missionTitle.value.trim();
+
+    if (!title) {
+        deployMissionResult.textContent =
+            "Please enter the mission name.";
+        return;
+    }
+
+    const mission = {
+      title: `Master ${missionTitle.value}`,
+      technology: `${missionTitle.value}`,
+      status: "in-progress"
+    };
+    try {
+      deployMissionResult.textContent = "Deploying Mission..."
+
+      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(mission)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("deployed data:", data)
+      deployMissionResult.innerHTML = `Mission deployed successfully!<br>Mission id: ${data.id}`
+
+    } catch (error) {
+      deployMissionResult.textContent = `Failed: ${error.message}`
+    }
+  }
+
+
+const deployMissionBtn = document.getElementById("deployMissionBtn");
+const deployMissionResult = document.getElementById("deployMissionResult");
+
+deployMissionBtn.addEventListener("click", deployMission);
+
+//Mission Active button
+const heading = document.querySelector("h1");
+const subtitle = document.querySelector(".subtitle");
+const subHeading = document.querySelector("h2");
+const date = document.querySelector(".date");
+const startBtn = document.querySelector("#startBtn");
+
+function startMission() {
+  heading.textContent = "Mission Started Successfully";
+  subtitle.textContent = "We are on a mission to explore the universe ";
+
+  date.style.display = "block";
+  // startBtn.disabled = true;
+  startBtn.textContent = "Mission Active";
+
+}
+// console.log(parseInt(Date.()));
+
+
+//Closures
+function createMissionCounter() {
+  let count = 0;
+  return function () {
+    count++;
+    console.log("Completed", count);
+    document.querySelector("#mission-counter").textContent = "Mission Counter:" + count;
+
+  }
+}
+const completeMission = createMissionCounter();
+// completeMission();
+// completeMission();
+// completeMission();
+
 //Mission start click event listener
-button.addEventListener("click", () => {
+// const startBtn= document.getElementById("startBtn");
+startBtn.addEventListener("click", () => {
   heading.textContent = "Mission Starting"
   setTimeout(() => {
     heading.textContent = "Loading..."
