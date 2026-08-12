@@ -1,92 +1,13 @@
 import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
-import './app.js'
+import { user, appVersion } from './data/user.js'
+import { missions, skills } from './data/mission.js'
+import { technologies } from './data/technologies.js'
 
+import { renderMissions, renderSkills, renderTechnologies } from './ui/render.js'
 
+import { initTeam } from './features/team.js'
 
-const user = {
-  name: "Jayaprakash",
-  goal: "Become a full-stack AI engineer",
-  country: "India"
-}
-
-const missionCompleted = false;
-
-// function greetUser(name)
-// {
-//   return `Welcome ${name}`;
-// }
-
-const greetUser = (name) => {
-  return `Welcome ${name}`;
-}
-
-const multiply = function (a, b) {
-  return a * b;
-}
-console.log(multiply(5, 8));
-
-//Global variable
-const appVersion = "1.0";
-
-
-//Functon scope
-function calculateProgress() {
-  let completed = 2;
-  console.log(completed);
-}
-
-calculateProgress();
-// console.log(completed);  It throws an error because completed is defined inside the function and cannot be accessed outside of it.
-
-//Block Scope
-if (true) {
-  let mission = "Learn React";
-}
-// console.log(mission); This throws an error because mission is defined inside the if block and cannot be accessed outside of it.
-
-
-
-
-
-
-//Hoisting
-sayHello();
-
-function sayHello() {
-  console.log("Hello");
-
-}
-
-// sayHi(); // This will throw an error because sayHi is defined as a function expression and is not hoisted.
-
-const sayHi = function () {
-  console.log("Hi");
-}
-
-//this
-const profile = {
-  name: "Jayaprakash",
-  greet: function () {
-    console.log(this.name);
-  }
-};
-profile.greet(); // This will log "Jayaprakash" because this refers to the profile object.
-
-//Missions
-const missions = [
-  "Learn Javascript",
-  "Master Node.js",
-  "Learn Express",
-  "Learn MongoDB"
-]
-
-function totalMissions(array) {
-  return array.length;
-}
+import { initMission } from './features/missionFeature.js'
 
 document.querySelector("#app").innerHTML = `
     <header>
@@ -95,477 +16,78 @@ document.querySelector("#app").innerHTML = `
     </header>
 
     <main>
-      <h2>${greetUser(user.name)}</h2>
+      <h2>Welcome ${user.name}</h2>
       <p>Goal: ${user.goal}</p>
       <p>Country: ${user.country}</p>
 
       <h2>Team Members</h2>
+
       <p id="loading">Loading team members...</p>
+
       <ul id="team"></ul>
+
       <button id="reload">Reload Team</button>
   
          <ul id='my-skills'> </ul>
+
          <ul id='my-technologies'> </ul>
-      <h2 class="date" style="display:none">Date: <span id="date-display"></span></h2>
+
+      <h2 class="date" style="display:none">
+      Date: <span id="date-display"></span>
+      </h2>
 
       <p>This is my engineering operating system</p>
-      <p>My Total Missions: ${totalMissions(missions)}</p>
+
+      <p>My Total Missions: ${missions.length}</p>
+
       <p id="mission-counter"></p>
+
       <ul id="my-missions"></ul>
+
       <p class="status"></p>
-      <button id="startBtn">Start Mission</button>
+
+      <button id="startBtn">
+      Start Mission
+      </button>
+
+    <form id="missionForm">
+
+       <label for="missionTitle">Mission Name:</label>
+       <input type="text" id="missionTitle" placeholder="Mission name" required>
+       <span id="missionTitle-error" style="color: red; display: none;"></span>
+
+      <br>
+
+      <label for="technologyTitle">Technology:</label>
+      <input type="text" id="technologyTitle" placeholder="Technology name" required>
+       <span id="technologyTitle-error" style="color: red; display: none;"></span>
+
+      <br>
+
+      <label for="difficultyTitle">Difficulty:</label>
+      <select name="difficulty" id="difficultyTitle" required>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+
+          <br>
+
+      <button type="submit" id="deployMissionBtn">
+        Deploy Mission
+      </button>
+    
+     </form>
+
+    <p id="deployMissionResult"></p>
     </main>
     `
 
+renderSkills(skills);
+renderMissions(missions);
+renderTechnologies(technologies);
 
-//Skills    
-const skills = ["HTML", "CSS", "JavaScript", "Node.js"];
 
-function renderSkills() {
 
-  // let skillList="";
-
-  // for (let skill of skills) {
-  //   skillList+=`<li>${skill}</li>`;
-  // }
-
-
-  //Using map function to render skills
-  const skillList = skills.map((skill) => `<li>${skill}</li>`).join("");
-  document.getElementById("my-skills").innerHTML = "Skills:" + skillList;
-
-}
-
-renderSkills();
-
-skills.push("Git");
-
-renderSkills();
-
-for (let i = 0; i < skills.length; i++) {
-  if (skills[i] === "JavaScript") {
-    // console.log("Favourite skill "+`${skills[i]}`)
-  }
-  else {
-    // console.log(`Learning ${skills[i]}`);
-  }
-}
-
-function hasSkill(skill) {
-  return skills.includes(skill);
-}
-
-console.log(hasSkill("Node.js"));
-console.log(hasSkill("Python"));
-
-
-function renderMissions() {
-  let missionList = ""
-  let a = 1;
-  for (let mission of missions) {
-    missionList += `<li>Mission ${a}  - ${mission}</li>`;
-    a += 1;
-  }
-
-  document.getElementById("my-missions").innerHTML = missionList;
-
-}
-
-renderMissions();
-
-
-function executeMission(callback) {
-  console.log("Mission Started");
-  callback();
-  console.log("Mission Completed");
-}
-
-executeMission(function () {
-  console.log("Learning JavaScript");
-})
-
-//Technologies
-const technologies = ["HTML", "CSS", "JavaScript", "Node.js", "Express", "MongoDB"];
-
-// const technologyArray=technologies.map((tech)=>` <li>${tech}</li>`);
-// document.getElementById("my-technologies").innerHTML="Technologies: "+technologyArray.join("");
-
-document.getElementById("my-technologies").innerHTML = "Technologies: " + technologies.map((tech) => ` <li>${tech}</li>`).join("");
-
-
-let upperCase = technologies.map((tech) => tech.toUpperCase())
-// console.log("UpperCase Technologies: "+upperCase);
-
-let techLength = technologies.filter((tech) => tech.length > 5);
-// console.log("Technologies with Length greater than 5: "+techLength);
-
-let searchTech = technologies.find((tech) => tech === "Node.js");
-// console.log("Found: "+searchTech);
-
-if (technologies.includes("React")) {
-  // console.log("React installed.");
-}
-else {
-  // console.log("React not installed.");
-}
-
-// technologies.forEach((tech)=>console.log("Learning "+tech));
-
-// const button = document.querySelector("#startBtn");
-// console.log(button)
-
-// function greet() {
-//   console.log("Welcome");
-// }
-
-const greet = () => {
-  console.log("Welcome");
-}
-greet();
-
-//User Authentication
-function authenticateUser(username, password) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (username === "jayaprakash" && password === "1234") {
-        resolve("Authentication Successful");
-      }
-      else {
-        reject(new Error("Invalid Credentials"));
-      }
-
-    }, 1500);
-  })
-}
-
-async function login() {
-  try {
-    const result = await authenticateUser("jayaprakash", "wrong");
-    console.log(result)
-
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-
-login();
-
-//Validate Mission
-function validateMission(mission) {
-  if (!mission) {
-    throw new Error("Mission is required");
-  }
-  if (mission.length < 5) {
-    throw new Error("Mission name is too short");
-  }
-  return "Mission is valid"
-}
-
-async function test() {
-
-  try {
-    console.log(validateMission("AI"))
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-
-test();
-
-console.log(validateMission("Learn Node.js"));
-
-
-
-
-
-
-//Mission Promise
-function launchMission() {
-  return new Promise((resolve, reject) => {
-    const success = true;
-
-    setTimeout(() => {
-      if (success) {
-        resolve("Mission launched successfully");
-      }
-      else {
-        reject("Mission launch failed");
-      }
-    }, 2000);
-  });
-}
-
-launchMission().then((message) => {
-  console.log(message);
-})
-  .catch((error) => {
-    console.log(error);
-  })
-
-//Converting previous code to async/await
-async function launchMissionMessage() {
-  try {
-    const message = await launchMission();
-    console.log(message);
-  }
-  catch (error) {
-    console.log(error);
-  }
-
-}
-
-launchMissionMessage();
-
-const dateSpan = document.getElementById("date-display");
-const today = new Date();
-
-const formattedDate = today.toLocaleDateString();
-dateSpan.textContent = formattedDate;
-
-if (missionCompleted) {
-  document.querySelector(".status").textContent = "Mission Completed";
-}
-else {
-  document.querySelector(".status").textContent = "Mission in Progress";
-}
-
-
-for (let i = 1; i <= 5; i++) {
-  if (i === 1) {
-    // console.log("Mission Started...")
-  }
-  // console.log(i);
-  if (i === 5) {
-    // console.log("Mission Complete")
-  }
-}
-
-//Fetch user data from jsonplaceholder
-
-// async function fetchUser() {
-//   try {
-//     const response = await fetch("https://jsonplaceholder.typicode.com/users");
-
-//     const data = await response.json();
-//     console.log(data);
-
-//     let index=0;
-//      document.getElementById("team").innerHTML=""
-
-//     while(index<data.length){
-//       // console.log(data[index].name)
-
-//       document.getElementById("team").innerHTML+=`<li>${data[index].name}</li>`
-//       index++;
-//     }
-//   }
-//   catch (error) {
-//     console.log(error)
-//   }
-
-// }
-
-// fetchUser()
-
-//Fetch Team members
-async function fetchTeam() {
-  const loadingElement = document.getElementById("loading");
-
-  try {
-    loadingElement.style.display = "block";
-
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
-
-    if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
-    }
-
-    const team = await response.json();
-    // console.log(team)
-
-    const teamList = team.map(member => ` <li>
-        <strong>${member.name}</strong><br>
-        Email: ${member.email}<br>
-        Company: ${member.company.name}<br>
-        City: ${member.address.city}
-    </li>`).join("");
-
-    document.getElementById("team").innerHTML = teamList;
-
-  } catch (error) {
-    console.log(error.message);
-
-    document.getElementById("team").innerHTML = `<li style="color: red;">Unable to load team members</li>`;
-
-  } finally {
-    loadingElement.style.display = "none";
-  };
-}
-
-fetchTeam();
-
-//Event listener for reload team
-document.getElementById("reload").addEventListener("click", () => {
-  setTimeout(() => {
-    fetchTeam();
-  }, 1000);
-})
-
-//Create Mission 
-async function createMission() {
-  const mission = {
-    title: "Learn React",
-    difficulty: "Hard"
-  };
-
-  try {
-    missionResult.textContent = "Creating Mission...";
-
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify(mission)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    console.log("Mission Created: ", data)
-
-    missionResult.textContent = `Mission created successfully. ID: ${data.id}`;
-
-  } catch (error) {
-    missionResult.textContent = `Failed: ${error.message}`;
-    console.log("Failed: ", error.message)
-  }
-}
-
-// createMission();
-
-const createMissionBtn = document.getElementById("createMissionBtn");
-const missionResult = document.getElementById("missionResult");
-const missionTitle = document.getElementById("missionTitle");
-
-
-createMissionBtn.addEventListener("click", createMission);
-
-//Deploying Mission
-async function deployMission() {
-    const title = missionTitle.value.trim();
-
-    if (!title) {
-        deployMissionResult.textContent =
-            "Please enter the mission name.";
-        return;
-    }
-
-    const mission = {
-      title: `Master ${missionTitle.value}`,
-      technology: `${missionTitle.value}`,
-      status: "in-progress"
-    };
-    try {
-      deployMissionResult.textContent = "Deploying Mission..."
-
-      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(mission)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("deployed data:", data)
-      deployMissionResult.innerHTML = `Mission deployed successfully!<br>Mission id: ${data.id}`
-
-    } catch (error) {
-      deployMissionResult.textContent = `Failed: ${error.message}`
-    }
-  }
-
-
-const deployMissionBtn = document.getElementById("deployMissionBtn");
-const deployMissionResult = document.getElementById("deployMissionResult");
-
-deployMissionBtn.addEventListener("click", deployMission);
-
-//Mission Active button
-const heading = document.querySelector("h1");
-const subtitle = document.querySelector(".subtitle");
-const subHeading = document.querySelector("h2");
-const date = document.querySelector(".date");
-const startBtn = document.querySelector("#startBtn");
-
-function startMission() {
-  heading.textContent = "Mission Started Successfully";
-  subtitle.textContent = "We are on a mission to explore the universe ";
-
-  date.style.display = "block";
-  // startBtn.disabled = true;
-  startBtn.textContent = "Mission Active";
-
-}
-// console.log(parseInt(Date.()));
-
-
-//Closures
-function createMissionCounter() {
-  let count = 0;
-  return function () {
-    count++;
-    console.log("Completed", count);
-    document.querySelector("#mission-counter").textContent = "Mission Counter:" + count;
-
-  }
-}
-const completeMission = createMissionCounter();
-// completeMission();
-// completeMission();
-// completeMission();
-
-//Mission start click event listener
-// const startBtn= document.getElementById("startBtn");
-startBtn.addEventListener("click", () => {
-  heading.textContent = "Mission Starting"
-  setTimeout(() => {
-    heading.textContent = "Loading..."
-  }, 200);
-
-  setTimeout(() => {
-    heading.textContent = "1 Second"
-  }, 500);
-
-  console.log("missioin started")
-  setTimeout(() => {
-    startMission();
-    completeMission();
-  }, 1000);
-
-  //SubHeading Mission Countdown
-  let count = 4;
-
-  const missionCountdown = setInterval(() => {
-    count--;
-    subHeading.textContent = "Mission starting in " + count + "...";
-
-    if (count === 0) {
-      subHeading.textContent = "Mission Started";
-      clearInterval(missionCountdown);
-    }
-  }, 2000);
-});
+initTeam();
+initMission();
