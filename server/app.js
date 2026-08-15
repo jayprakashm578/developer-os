@@ -1,6 +1,8 @@
 import express from "express";
 
 import missionRoutes from "./routes/missionRoute.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { notFound } from "./middleware/notFound.js";
 
 const app = express();
 
@@ -32,10 +34,12 @@ app.get("/api/user", (req, res) =>{
     });
 });
 
-app.use((req,res) =>{
-    res.status(404).json({
-        error: "Route not found"
-    });
-});
+app.get("/api/test-error", (req, res, next) =>{
+    next(new Error("Database connection failed"));
+})
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 export default app;

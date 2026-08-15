@@ -1,16 +1,12 @@
 import { missions } from "../data/mission.js";
+import { createMission, findMissionById, getAllMissions } from "../services/missionService.js";
+
 
 export function getMissions(req, res){
      const { difficulty } = req.query;
     console.log(difficulty);
 
-    if(difficulty){
-        const filteredMissions = missions.filter(
-            (m)=>m.difficulty.toLowerCase() === difficulty.toLowerCase()
-        );
-
-      return res.json(filteredMissions);
-    }
+    const missons = getAllMissions(difficulty);
 
     res.json(missions);
 }
@@ -19,9 +15,7 @@ export function getMissionById(req, res) {
 
     const id = Number(req.params.id);
 
-    const mission = missions.find(
-        (mission) => mission.id === id
-    );
+    const mission = findMissionById(id);
 
     if (!mission) {
         return res.status(404).json({
@@ -32,8 +26,10 @@ export function getMissionById(req, res) {
     res.json(mission);
 }
 
-export function createMission(req, res){
+export function createMissions(req, res){
     console.log("Received Mission: ", req.body);
+
+    const mission = createMission(req.body);
 
     res.status(201).json({
         message: "Mission received",
