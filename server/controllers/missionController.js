@@ -1,93 +1,98 @@
-import { missions } from "../data/mission.js";
-import { createMission, findMissionById, getAllMissions } from "../services/missionService.js";
+// import { missions } from "../data/mission.js";
+import { createMissionService, deleteMissionService, getAllMissions, getMissionByIdService, updateMissionService } from "../services/missionService.js";
 
 
-export function getMissions(req, res){
-     const { difficulty } = req.query;
-    console.log(difficulty);
+export async function getMissions(req, res, next) {
+    try {
+        const page = Math.max(Number(req.query.page) || 1, 1);
 
-    const missons = getAllMissions(difficulty);
+        const limit = Math.min(Math.max(Number(req.query.limit) || 5, 1), 50)
 
-    res.json(missions);
-}
+        const { difficulty } = req.query;
 
-export function getMissionById(req, res) {
-
-    const id = Number(req.params.id);
-
-    const mission = findMissionById(id);
-
-    if (!mission) {
-        return res.status(404).json({
-            error: "Mission not found"
+        const result = await getAllMissions({
+            difficulty: req.query.difficulty,
+            search: req.query.search,
+            sort: req.query.sort,
+            page,
+            limit
         });
+
+        res.json(result);
+
+    } catch (error) {
+        next(error);
     }
-
-    res.json(mission);
 }
 
-export function createMissions(req, res){
-    console.log("Received Mission: ", req.body);
+export async function getMissionById(req, res, next) {
+    try {
+        const mission = await getMissionByIdService(req.params.id);
 
-    const mission = createMission(req.body);
+        if (!mission) {
+            return res.status(404).json({
+                error: "Mission not found"
+            });
+        }
+        res.json(mission);
 
-    res.status(201).json({
-        message: "Mission received",
-        mission: req.body                           
-    });
+    } catch (error) {
+        next(error);
+    }
 }
 
-export function deleteMission(req, res) {
+export async function createMission(req, res, next) {
+    try {
 
-    const id = Number(req.params.id);
+        console.log("Received Mission: ", req.body);
 
-    const missionIndex = missions.findIndex(
-        (mission) => mission.id === id
-    );
+        const mission = await createMissionService(req.body);
 
-    if (missionIndex === -1) {
-        return res.status(404).json({
-            error: "Mission not found"
+        res.status(201).json({
+            message: "Mission created successfully",
+            mission
         });
+    } catch (error) {
+        next(error);
     }
-
-    const deletedMission = missions.splice(missionIndex, 1)[0];
-
-    res.status(200).json({
-        message: "Mission deleted successfully",
-        mission: deletedMission
-    });
 }
 
-export function updateMission(req, res) {
-    const id = Number(req.params.id);
-    const {title, difficulty} =req.body;
+export async function deleteMission(req, res, next) {
+    try {
 
-    
-    if(!title || !difficulty){
-        return res.status(400).json({
-            error: "Missing required fields: title, difficulty"
-        })
-    }
-    
-    const missionIndex = missions.findIndex(
-        (mission) => mission.id === id
-    );
+        const mission = await deleteMissionService(req.params.id);
 
-    if(missionIndex === -1){
-        return res.status(404).json({
-            error: "Mission not found"
+        if (!mission) {
+            return res.status(404).json({
+                error: "Mission not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Mission deleted successfully",
+            mission
         });
+    } catch (error) {
+        next(error);
     }
+}
 
-   missions[missionIndex] = {
-   ...missions[missionIndex],
-    title,
-    difficulty
-   } ;
+export async function updateMission(req, res, next) {
+    try {
 
-   res.json({
-    message: "Mission replaced successfully",
-    data: missions[missionIndex]
-   });
+        const mission = await updateMissionService(req.params.id, req.body)
+
+        if (!mission) {
+            return res.status(404).json({
+                error: "Mission not found"
+            });
+        }
+
+        res.json({
+            message: "Mission replaced successfully",
+            mission
+        });
+    } catch (error) {
+        next(error);
+    }
 }

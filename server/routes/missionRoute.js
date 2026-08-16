@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getMissions, getMissionById, createMissions, deleteMission, updateMission} from "../controllers/missionController.js";
+import { getMissions, getMissionById, createMission, deleteMission, updateMission} from "../controllers/missionController.js";
 
 import { validateMission } from "../middleware/validateMission.js";
 
@@ -10,7 +10,7 @@ missionRoutes.get("/", getMissions);
 
 missionRoutes.get("/:id", getMissionById);
 
-missionRoutes.post("/", validateMission, createMissions);
+missionRoutes.post("/", validateMission, createMission);
 
 missionRoutes.delete("/:id", deleteMission);
 

@@ -20,4 +20,4 @@ const missionSchema = new mongoose.Schema(
     }
 );
 
-export const mission = mongoose.model("Mission", missionSchema);
+export const Mission = mongoose.model("Mission", missionSchema);
