@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { User } from "./user.js";
 
 const missionSchema = new mongoose.Schema(
     {
@@ -12,12 +13,21 @@ const missionSchema = new mongoose.Schema(
         difficulty: {
             type: String,
             required: true,
+            index: true,
             enum: ["easy", "medium", "hard"]
+        },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
         }
     },
     {
         timestamps: true
     }
 );
+
+
+missionSchema.index({difficulty: 1, createdAt: -1});
 
 export const Mission = mongoose.model("Mission", missionSchema);

@@ -3,6 +3,7 @@ import express from "express";
 import missionRoutes from "./routes/missionRoute.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
+import userRoutes from "./routes/userRoute.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use((req, res, next) =>{
 });
 
 app.use("/api/missions", missionRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) =>{
     res.send("Developer OS Express backend.")

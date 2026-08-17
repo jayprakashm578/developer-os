@@ -1,4 +1,5 @@
 import { Mission } from "../models/Mission.js";
+import { User } from "../models/user.js";
 
 export async function getAllMissions({difficulty, search, sort, page = 1, limit = 5}) {
     const filter = {};
@@ -15,7 +16,7 @@ export async function getAllMissions({difficulty, search, sort, page = 1, limit 
         };
     }
 
-    let sortValue = sort.toLowerCase();
+    let sortValue;
     if(sortValue === "newest"){
         sortValue = {createdAt: -1};
     }
@@ -29,6 +30,7 @@ export async function getAllMissions({difficulty, search, sort, page = 1, limit 
 
     const [missions, total] = await Promise.all([
         Mission.find(filter)
+            .populate("createdBy")
             .sort(sortValue)
             .skip(skip)
             .limit(limit)
@@ -47,8 +49,8 @@ export async function getAllMissions({difficulty, search, sort, page = 1, limit 
     };
 }
 
-export async function getMissionByIdService(id) {
-    return Mission.findById(id);
+export async function getMissionByIdService(id, populateField= "") {
+    return Mission.findById(id).populate(populateField);
 }
 
 
@@ -57,7 +59,9 @@ export async function createMissionService(data) {
 
     return Mission.create({
         title: data.title,
-        difficulty: data.difficulty
+        difficulty: data.difficulty,
+        createdBy: data.createdBy
+       
     });
 }
 
@@ -81,3 +85,10 @@ export async function deleteMissionService(id) {
     return Mission.findByIdAndDelete(id);
 }
 
+//Create a User
+export async function createUserService(data) {
+    return User.create({
+        name: data.name,
+        email: data.email
+    })
+}

@@ -14,7 +14,8 @@ missionRoutes.post("/", validateMission, createMission);
 
 missionRoutes.delete("/:id", deleteMission);
 
-missionRoutes.put("/:id", updateMission)
+missionRoutes.put("/:id", updateMission);
+
 
 
 export default missionRoutes;

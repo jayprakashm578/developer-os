@@ -1,5 +1,5 @@
 // import { missions } from "../data/mission.js";
-import { createMissionService, deleteMissionService, getAllMissions, getMissionByIdService, updateMissionService } from "../services/missionService.js";
+import { createMissionService, createUserService, deleteMissionService, getAllMissions, getMissionByIdService, updateMissionService } from "../services/missionService.js";
 
 
 export async function getMissions(req, res, next) {
@@ -27,7 +27,7 @@ export async function getMissions(req, res, next) {
 
 export async function getMissionById(req, res, next) {
     try {
-        const mission = await getMissionByIdService(req.params.id);
+        const mission = await getMissionByIdService(req.params.id, 'createdBy');
 
         if (!mission) {
             return res.status(404).json({
@@ -92,6 +92,21 @@ export async function updateMission(req, res, next) {
             message: "Mission replaced successfully",
             mission
         });
+    } catch (error) {
+        next(error);
+    }
+}
+
+//Create a User
+export async function createUser(req, res, next) {
+    console.log("Created User", req.body)
+    try{
+        const user = await createUserService(req.body);
+
+        res.status(201).json({
+            message: "User created successfully",
+            user
+        })
     } catch (error) {
         next(error);
     }
