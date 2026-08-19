@@ -1,5 +1,4 @@
 import { Mission } from "../models/Mission.js";
-import { User } from "../models/user.js";
 
 export async function getAllMissions({difficulty, search, sort, page = 1, limit = 5}) {
     const filter = {};
@@ -55,12 +54,12 @@ export async function getMissionByIdService(id, populateField= "") {
 
 
 //Create a mission
-export async function createMissionService(data) {
-
+export async function createMissionService(req) {
+        const {title, difficulty} = req.body;
     return Mission.create({
-        title: data.title,
-        difficulty: data.difficulty,
-        createdBy: data.createdBy
+        title,
+        difficulty,
+        createdBy: req.user._id
        
     });
 }
@@ -85,10 +84,3 @@ export async function deleteMissionService(id) {
     return Mission.findByIdAndDelete(id);
 }
 
-//Create a User
-export async function createUserService(data) {
-    return User.create({
-        name: data.name,
-        email: data.email
-    })
-}

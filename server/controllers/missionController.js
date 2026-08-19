@@ -1,5 +1,5 @@
 // import { missions } from "../data/mission.js";
-import { createMissionService, createUserService, deleteMissionService, getAllMissions, getMissionByIdService, updateMissionService } from "../services/missionService.js";
+import { createMissionService, deleteMissionService, getAllMissions, getMissionByIdService, updateMissionService } from "../services/missionService.js";
 
 
 export async function getMissions(req, res, next) {
@@ -46,7 +46,7 @@ export async function createMission(req, res, next) {
 
         console.log("Received Mission: ", req.body);
 
-        const mission = await createMissionService(req.body);
+        const mission = await createMissionService(req);
 
         res.status(201).json({
             message: "Mission created successfully",
@@ -97,17 +97,3 @@ export async function updateMission(req, res, next) {
     }
 }
 
-//Create a User
-export async function createUser(req, res, next) {
-    console.log("Created User", req.body)
-    try{
-        const user = await createUserService(req.body);
-
-        res.status(201).json({
-            message: "User created successfully",
-            user
-        })
-    } catch (error) {
-        next(error);
-    }
-}

@@ -16,7 +16,8 @@ app.use((req, res, next) =>{
 });
 
 app.use("/api/missions", missionRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/user", userRoutes)
+
 
 app.get("/", (req, res) =>{
     res.send("Developer OS Express backend.")
