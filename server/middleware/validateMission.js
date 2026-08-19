@@ -1,45 +1,43 @@
 export function validateMission(req, res, next) {
+  const { title, difficulty, createdBy } = req.body;
 
-    const {title, difficulty, createdBy} = req.body;
-
-    if(!title || !difficulty){
-        return res.status(400).json({
-            error: "title and difficulty are required"
-        })
-    }
-
-
-    if (!createdBy) {
+  if (!title || !difficulty) {
     return res.status(400).json({
-        error: "createdBy is required"
+      error: "title and difficulty are required",
     });
-}
+  }
 
-    if(typeof title !== "string"){
-        return res.status(400).json({
-            error: "title must be a string"
-        })
-    }
+//   if (!createdBy) {
+//     return res.status(400).json({
+//       error: "createdBy is required",
+//     });
+//   }
 
-    if(title.trim().length < 5){
-        res.status(400).json({
-            error: "title must contain at least 5 characters"
-        })
-    }
+  if (typeof title !== "string") {
+    return res.status(400).json({
+      error: "title must be a string",
+    });
+  }
 
-    const validDifficulties=["easy", "medium", "hard"];
+  if (title.trim().length < 5) {
+    res.status(400).json({
+      error: "title must contain at least 5 characters",
+    });
+  }
 
-    if(!validDifficulties.includes(difficulty.toLowerCase())){
-        res.status(400).json({
-            error: "invalid difficulty"
-        })
-    }
+  const validDifficulties = ["easy", "medium", "hard"];
 
-    if(typeof(difficulty) !== "string"){
-        return res.status(400).json({
-            error: "difficulty must be a string"
-        })
-    }
+  if (!validDifficulties.includes(difficulty.toLowerCase())) {
+    res.status(400).json({
+      error: "invalid difficulty",
+    });
+  }
 
-    next();
+  if (typeof difficulty !== "string") {
+    return res.status(400).json({
+      error: "difficulty must be a string",
+    });
+  }
+
+  next();
 }
