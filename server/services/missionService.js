@@ -1,4 +1,5 @@
 import { Mission } from "../models/Mission.js";
+import { User } from "../models/user.js";
 
 export async function getAllMissions({
   difficulty,
@@ -67,14 +68,14 @@ export async function createMissionService(req) {
 }
 
 //Update a Mission
-export async function updateMissionService(missionId, userId, data) {
+export async function updateMissionService(missionId, userId, data, role) {
   const mission = await Mission.findById(missionId);
 
   if (!mission) {
     return { notFound: true };
   }
 
-  if (!mission.createdBy.equals(userId)) {
+  if (!mission.createdBy.equals(userId) &&role !== "admin") {
     return { forbidden: true };
   }
 
@@ -87,17 +88,17 @@ export async function updateMissionService(missionId, userId, data) {
 }
 
 //Delete a mission
-export async function deleteMissionService(missionId, userId) {
+export async function deleteMissionService(missionId, userId, role) {
   const mission = await Mission.findById(missionId);
 
   if (!mission) {
     return { notFound: true };
   }
 
-  if (!mission.createdBy.equals(userId)) {
+  if (!mission.createdBy.equals(userId) && role !== "admin") {
     return { forbidden: true };
   }
-  
+
   await Mission.findByIdAndDelete(missionId);
 
   return {

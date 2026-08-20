@@ -4,6 +4,7 @@ import missionRoutes from "./routes/missionRoute.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 import userRoutes from "./routes/userRoute.js";
+import adminRoutes from "./routes/adminRoute.js";
 
 const app = express();
 
@@ -16,7 +17,8 @@ app.use((req, res, next) =>{
 });
 
 app.use("/api/missions", missionRoutes);
-app.use("/api/user", userRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 app.get("/", (req, res) =>{

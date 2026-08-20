@@ -62,7 +62,7 @@ export async function createMission(req, res, next) {
 
 export async function deleteMission(req, res, next) {
   try {
-    const result = await deleteMissionService(req.params.id, req.user._id);
+    const result = await deleteMissionService(req.params.id, req.user._id, req.user.role);
 
     if (result.notFound) {
       return res.status(404).json({
@@ -91,6 +91,7 @@ export async function updateMission(req, res, next) {
       req.params.id,
       req.user._id,
       req.body,
+      req.user.role
     );
 
     if (result.notFound) {

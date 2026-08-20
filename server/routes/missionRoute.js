@@ -4,6 +4,7 @@ import { getMissions, getMissionById, createMission, deleteMission, updateMissio
 
 import { validateMission } from "../middleware/validateMission.js";
 import { validateUser } from "../middleware/authMiddleware.js";
+import { requireAdmin } from "../middleware/adminMiddleware.js";
 
 const missionRoutes = express.Router();
 
@@ -17,7 +18,8 @@ missionRoutes.post("/",validateUser, validateMission, createMission);
 
 missionRoutes.delete("/:id",validateUser, deleteMission);
 
-missionRoutes.put("/:id",validateUser,validateMission, updateMission);
+missionRoutes.put("/:id",validateUser, validateMission, updateMission);
+
 
 
 

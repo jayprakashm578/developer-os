@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 import "dotenv/config"
 
 //Create a User
-export async function createUserService(data) {
+export async function createUserService(name, email, password) {
     return User.create({
-        name: data.name,
-        email: data.email,
-        password: data.password
+        name,
+        email,
+        password
     })
 }
 
