@@ -9,7 +9,4 @@ export async function requireAdmin(req, res, next) {
     }
 
     return next();
-    // return res.status(200).json({
-    //     message: "Admin login successfull"
-    // });
 }
